@@ -4,7 +4,7 @@ const models = require('../models');
 // get the Cat model
 const { Cat } = models;
 
-// get the Dog model 
+// get the Dog model
 const { Dog } = models;
 
 // default fake data so that we have something to work with until we make a real Cat
@@ -29,7 +29,7 @@ const hostIndex = (req, res) => {
      We pass it a number of variables to populate the page.
   */
   res.render('index', {
-    currentName: `${lastCatAdded.name} & ${lastDogAdded.name}`,
+    currentName: `${lastCatAdded.name} and ${lastDogAdded.name}`,
     title: 'Home',
     pageName: 'Home Page',
   });
@@ -262,7 +262,7 @@ const notFound = (req, res) => {
   });
 };
 
-// A function to make a new dog 
+// A function to make a new dog
 const setDogName = async (req, res) => {
   if (!req.body.firstname || !req.body.lastname || !req.body.breed || !req.body.age) {
     return res.status(400).json({ error: 'First name, last name, breed, and age are all required' });
@@ -287,25 +287,25 @@ const setDogName = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'failed to create a dog' });
+    return res.status(500).json({ error: 'Failed to create a dog' });
   }
 };
 
-// Searches for a dog with a specific name, then increases the dog's age by 1 
+// Searches for a dog with a specific name, then increases the dog's age by 1
 const increaseAge = async (req, res) => {
   if (!req.query.name) {
     return res.status(400).json({ error: 'Name is required to perform a search' });
   }
 
   try {
-    //let doc = await Dog.findOne({ name: req.query.name }).exec();
-    let doc = await Dog.findOneAndUpdate({name: req.query.name}, {$inc: {age: 1}});
+    // let doc = await Dog.findOne({ name: req.query.name }).exec();
+    const doc = await Dog.findOneAndUpdate({ name: req.query.name }, { $inc: { age: 1 } });
 
     if (!doc) {
       return res.json({ error: 'No dogs found' });
     }
 
-    return res.json({ name: doc.name, breed: doc.breed, age: doc.age });
+    return res.json({ name: doc.name, breed: doc.breed, age: doc.age + 1 });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Something went wrong' });
